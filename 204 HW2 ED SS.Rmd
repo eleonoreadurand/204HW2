@@ -35,9 +35,9 @@ curve(-0.0001297*x +23.39, from=0, to=200000, n=200, col="seagreen4", xlab= "Qua
 curve(-0.0001355*x+ 21.99, from=0, to=200000, n=200, col="springgreen3", add=TRUE) 
 
 graph<- ggplot(data.frame(x=c(0,400000), y=c(0,25)), aes(x=x, y=y))+
-  stat_function(fun=MEC)+
-  stat_function(fun=DH)+
-  stat_function(fun=DL)+
+  stat_function(fun=MEC, color="lightsalmon4")+
+  stat_function(fun=DH, color="seagreen4")+
+  stat_function(fun=DL, color= "springgreen3")+
   stat_function(fun=DAGG)+
   stat_function(fun=MPC)+
   stat_function(fun=MSC)+
