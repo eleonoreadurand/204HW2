@@ -27,6 +27,7 @@ DAGG=function(x){-0.000066*x +22.7053}
 DAGQ=function(x){-15090.2*x+342627}
 MPC=function(x){0.000019*x}
 MSC=function(x){0.000019*x+2}
+MPCtax=function(x){0.000019*x+0.5}
 
 lmlow<- lm(gasdata$Price_Dollars ~ gasdata$Q_Low_Gallons_per_Day)
 
@@ -40,6 +41,7 @@ graph<- ggplot(data.frame(x=c(0,400000), y=c(0,25)), aes(x=x, y=y))+
   stat_function(fun=DAGG)+
   stat_function(fun=MPC)+
   stat_function(fun=MSC)+
+  stat_function(fun=MPCtax, color="red")+
   scale_y_continuous(expand=c(0,0), breaks=seq(0, 25, by=5), limits=c(0,25))+
   scale_x_continuous(expand=c(0,0))+
   theme_classic()
