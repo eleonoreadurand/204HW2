@@ -20,19 +20,36 @@ gasdata <- read_csv("Gas_Data.csv")
 lmhigh <- lm(gasdata$Price_Dollars ~ gasdata$Q_High_Gallons_per_Day)
 lmhigh
 MEC=function(x){2}
-curve(expr=MEC, from=0, to=200000, n=1)
-DH=function(x){-0.0001297*x+23.39}
-DL=function(x){-0.0001355*x+21.99}
-DAGG=function(x){-0.000066*x +22.7053}
-DAGQ=function(x){-15090.2*x+342627}
-MPC=function(x){0.000019*x}
-MSC=function(x){0.000019*x+2}
-MPCtax=function(x){0.000019*x+0.5}
+DH=function(x){-0.0001297*x+23.3914418}
+DL=function(x){-0.0001355*x+21.9908534}
+DAGG=function(x){-0.00006626831*x +22.70647}
+DAGQ=function(x){-15090.17*x+342644.5}
+MPC=function(x){0.00001871302*x}
+MSC=function(x){0.00001871302*x+2}
+MPCtax=function(x){0.00001871302*x+0.5}
+GasPrice=function(x){5}
+DHQ=function(x){-7710.1 *x+180339}
+DLQ=function(x){-7380.07*x+162288}
+DH2=function(x){(-0.0001297*x+23.39)/2}
+GasPricetax=function(x){5.463538}
+
+taxamount<- 0
+mpcnew=function(x){0.00001871302*x+taxamount} 
+
+intersection <- curve_intersect(mpcnew, DAGG, empirical = FALSE, domain=c(0,350000))
+line=function(x){intersection$y}
+intersectionlow<- curve_intersect(line, DL, empirical = FALSE, domain=c(0,350000))
+welfarelow<- ((21.9908534-intersectionlow$y)* intersectionlow$x)/2
+
+intersectionhigh<-curve_intersect(line, DH, empirical = FALSE, domain=c(0,350000))
+welfarehigh<- ((23.3914418-intersectionhigh$y)* intersectionhigh$x)/2
+
+producerw<- (MPC(intersection$x)*(intersection$x))/2
+
+
 
 lmlow<- lm(gasdata$Price_Dollars ~ gasdata$Q_Low_Gallons_per_Day)
 
-curve(-0.0001297*x +23.39, from=0, to=200000, n=200, col="seagreen4", xlab= "Quantity of Gallons Per Day", ylab="Price Per Gallon ($)") +
-curve(-0.0001355*x+ 21.99, from=0, to=200000, n=200, col="springgreen3", add=TRUE) 
 
 graph<- ggplot(data.frame(x=c(0,400000), y=c(0,25)), aes(x=x, y=y))+
   stat_function(fun=MEC, color="lightsalmon4")+
@@ -41,10 +58,67 @@ graph<- ggplot(data.frame(x=c(0,400000), y=c(0,25)), aes(x=x, y=y))+
   stat_function(fun=DAGG)+
   stat_function(fun=MPC)+
   stat_function(fun=MSC)+
+  stat_function(fun=GasPrice)+
+  stat_function(fun=GasPricetax)+
   stat_function(fun=MPCtax, color="red")+
   scale_y_continuous(expand=c(0,0), breaks=seq(0, 25, by=5), limits=c(0,25))+
   scale_x_continuous(expand=c(0,0))+
   theme_classic()
-graph 4
+graph 
+
+
+#curve_intersect(DAGG, MPCtax, empirical = FALSE, domain = c(200000, 300000)) example of curve intersect with DAGG and MPCtax
+
+curve_intersect(GasPricetax, DL, empirical = FALSE, domain=c(100000,200000)) #intersect OF Low Demand and New Gas Price to calculate area 
+(((21.99-5.463538)*121966.5)/2) #area of benefit for poor
+
+test<- curve_intersect(GasPricetax, DH, empirical = FALSE, domain=c(100000,200000)) 
+#(((23.39-5.463538)*138214.8)/2) area of benefit for rich
+
+#Producer surplus/benefit= (261238.8*5.463538)/2 
+#Tax revenue is Q produced at tax * tax 
+(261238.824*0.5)
+
+
+```
+
+Question 4: Infrastructure Repairs and taxes, calculate welfare benefit for high and low income, gas producers
+
+Welfare Benefit for tax of 1= 
+
+```{r}
+DH2=function(x){(-0.0001297*x+23.39)/2}
+DL2=function(x){-0.0001355*x+21.99}
+DAGG2=function(x){-0.000066*x +22.7053}
+
+MEC=function(x){2}
+DH=function(x){-0.0001297*x+23.39}
+DL=function(x){-0.0001355*x+21.99}
+DAGG=function(x){-0.000066*x +22.7053}
+DAGQ=function(x){-15090.2*x+342627}
+MPC=function(x){0.000019*x}
+MSC=function(x){0.000019*x+2}
+MPCtax2=function(x){0.000019*x+1}
+GasPrice=function(x){5}
+DHQ=function(x){-7710.1 *x+180339}
+DLQ=function(x){-7380.07*x+162288}
+DH2=function(x){(-0.0001297*x+23.39)/2}
+GasPricetax2=function(x){5.851773}
+
+
+graph2<- ggplot(data.frame(x=c(0,400000), y=c(0,25)), aes(x=x, y=y))+
+  stat_function(fun=MEC, color="lightsalmon4")+
+  stat_function(fun=DH, color="seagreen4")+
+  stat_function(fun=DL, color= "springgreen3")+
+  stat_function(fun=DAGG)+
+  stat_function(fun=MPC)+
+  stat_function(fun=MSC)+
+  stat_function(fun=GasPrice)+
+  stat_function(fun=GasPricetax2)+
+  stat_function(fun=MPCtax2, color="red")+
+  scale_y_continuous(expand=c(0,0), breaks=seq(0, 25, by=5), limits=c(0,25))+
+  scale_x_continuous(expand=c(0,0))+
+  theme_classic()
+graph2 
 ```
 
