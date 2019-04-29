@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #load libraries and read in data
 
 library(tidyverse)
+library(reconPlots)
 
 gasdata <- read_csv("Gas_Data.csv")
 
@@ -45,6 +46,6 @@ graph<- ggplot(data.frame(x=c(0,400000), y=c(0,25)), aes(x=x, y=y))+
   scale_y_continuous(expand=c(0,0), breaks=seq(0, 25, by=5), limits=c(0,25))+
   scale_x_continuous(expand=c(0,0))+
   theme_classic()
-graph 4
+graph
 ```
 
